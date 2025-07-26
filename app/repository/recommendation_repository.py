@@ -1,9 +1,11 @@
-from typing import Optional, List, Dict, Any
-from sqlalchemy.orm import Session
-from sqlalchemy import and_, desc, or_
 from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
 
-from app.models.recommendation import Recommendation, ABTestExperiment
+from sqlalchemy import and_, desc, or_
+from sqlalchemy.orm import Session
+
+from app.models.recommendation import ABTestExperiment, Recommendation
+
 from .base import BaseRepository
 
 

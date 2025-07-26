@@ -1,16 +1,16 @@
-# Learner Graph RAG System 🧠
+# Learner Graph RAG System
 
 A comprehensive **Recommendation Algorithm/Graph (RAG)** system designed to boost learner engagement by **+20%** through personalized learning recommendations, mastery tracking, and gamified streak goals.
 
 ## 🚀 Features
 
-- **🎯 ML-Powered Recommendation Engine**: Collaborative filtering + content-based algorithms
-- **📊 Real-time Learning Analytics**: Track mastery levels, learning gaps, and progress
-- **🔬 A/B Testing Framework**: Statistical experimentation for algorithm optimization  
-- **⚡ High Performance**: <100ms P99 recommendation latency target
-- **🎮 Gamification**: Streak tracking and personalized goal setting
-- **🔍 Explainable AI**: "Why Genie recommended this" explanations
-- **📈 Success Metrics**: Target +15% practice minute boost within 7 days
+- **ML-Powered Recommendation Engine**: Collaborative filtering + content-based algorithms
+- **Real-time Learning Analytics**: Track mastery levels, learning gaps, and progress
+- **A/B Testing Framework**: Statistical experimentation for algorithm optimization  
+- **High Performance**: <100ms P99 recommendation latency target
+- **Gamification**: Streak tracking and personalized goal setting
+- **Explainable AI**: "Why Genie recommended this" explanations
+- **Success Metrics**: Target +15% practice minute boost within 7 days
 
 ## 🏗️ Architecture
 
@@ -213,27 +213,6 @@ The system provides transparent recommendation explanations:
 - **Weekly Summaries**: Learning path recommendations
 - **A/B Test Analysis**: Statistical significance calculations
 
-## 🧪 Testing Strategy
-
-### Unit Tests
-```bash
-pytest tests/unit/ -v
-```
-
-### Integration Tests
-```bash
-pytest tests/integration/ -v
-```
-
-### A/B Test Validation
-```bash
-pytest tests/ab_testing/ -v
-```
-
-### Performance Tests
-```bash
-pytest tests/performance/ -v
-```
 
 ## 🔧 Configuration
 
@@ -255,15 +234,6 @@ TARGET_PRACTICE_BOOST_PERCENT=15.0
 ```
 
 ## 🚀 Deployment
-
-### Docker
-```dockerfile
-FROM python:3.9-slim
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY app/ app/
-CMD ["python", "-m", "app.main"]
-```
 
 ### Production Considerations
 - **Database**: Migrate to Neo4j or Amazon Neptune for graph operations
@@ -288,24 +258,8 @@ CMD ["python", "-m", "app.main"]
 - **Browser Extension**: Context-aware learning suggestions
 - **API Gateway**: Multi-tenant support and rate limiting
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
-
-- FastAPI for the excellent web framework
-- SQLAlchemy for robust ORM capabilities
-- The open-source ML community for inspiration
-
----
-
-**Built with ❤️ for learners everywhere** 🌟 

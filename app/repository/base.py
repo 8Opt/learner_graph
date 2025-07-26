@@ -1,6 +1,8 @@
-from typing import Generic, TypeVar, Type, Optional, List, Dict, Any
+from typing import Any, Dict, Generic, List, Optional, Type, TypeVar
+
+from sqlalchemy import and_, asc, desc, or_
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_, desc, asc
+
 from app.core.database import Base
 from app.core.exceptions import NotFoundException
 

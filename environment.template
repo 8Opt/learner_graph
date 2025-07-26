@@ -1,0 +1,245 @@
+# ==============================================================================
+# Learner Graph RAG System - Environment Variables Template
+# ==============================================================================
+# Copy this file to .env and update the values for your environment
+# 
+# Usage: cp environment.template .env
+# Then edit .env with your actual values
+# ==============================================================================
+
+# ==============================================================================
+# DATABASE CONFIGURATION
+# ==============================================================================
+# SQLite for development, PostgreSQL for production
+DATABASE_URL=sqlite:///./learner_graph.db
+# For PostgreSQL: postgresql://username:password@host:port/database_name
+# DATABASE_URL=postgresql://learner_user:your_password@localhost:5432/learner_graph
+
+# ==============================================================================
+# REDIS CONFIGURATION
+# ==============================================================================
+# Redis connection URL for caching and real-time data
+REDIS_URL=redis://localhost:6379
+# For Redis with password: redis://:password@localhost:6379
+# For Redis Cluster: redis://localhost:7000,localhost:7001,localhost:7002
+
+# ==============================================================================
+# API CONFIGURATION
+# ==============================================================================
+# API version prefix
+API_V1_STR=/api/v1
+
+# Project information
+PROJECT_NAME=Learner Graph RAG System
+VERSION=1.0.0
+
+# Server configuration
+HOST=0.0.0.0
+PORT=8000
+
+# ==============================================================================
+# RECOMMENDATION ENGINE SETTINGS
+# ==============================================================================
+# Cache TTL for recommendations (seconds)
+RECOMMENDATION_CACHE_TTL=300
+
+# Maximum number of recommendations to generate
+MAX_RECOMMENDATIONS=10
+
+# Minimum mastery threshold for concept completion
+MIN_MASTERY_THRESHOLD=0.7
+
+# Recommendation algorithm version
+RECOMMENDATION_ALGORITHM_VERSION=v1.2.0
+
+# ==============================================================================
+# STREAK ENGINE SETTINGS
+# ==============================================================================
+# Hours before a streak is considered broken
+STREAK_DECAY_HOURS=48
+
+# Minimum practice minutes required per day for streak
+MIN_PRACTICE_MINUTES_PER_DAY=15
+
+# Default streak target for new users
+DEFAULT_STREAK_TARGET=7
+
+# ==============================================================================
+# A/B TESTING CONFIGURATION
+# ==============================================================================
+# Enable/disable A/B testing framework
+AB_TEST_ENABLED=true
+
+# Default traffic split for A/B tests (0.0 to 1.0)
+DEFAULT_AB_SPLIT=0.5
+
+# A/B test hash salt for consistent user assignment
+AB_TEST_HASH_SALT=learner_graph_ab_salt_2024
+
+# ==============================================================================
+# PERFORMANCE TARGETS & MONITORING
+# ==============================================================================
+# Target P99 recommendation latency in milliseconds
+RECOMMENDATION_LATENCY_P99_MS=100
+
+# Target practice boost percentage for success metrics
+TARGET_PRACTICE_BOOST_PERCENT=15.0
+
+# System uptime target (percentage)
+TARGET_UPTIME_PERCENT=99.9
+
+# ==============================================================================
+# SECURITY CONFIGURATION
+# ==============================================================================
+# JWT secret key for token signing (generate with: openssl rand -base64 32)
+JWT_SECRET_KEY=your-super-secret-jwt-key-here-please-change-this
+
+# JWT token expiration time (hours)
+JWT_EXPIRATION_HOURS=24
+
+# API rate limiting (requests per minute)
+API_RATE_LIMIT_PER_MINUTE=100
+
+# CORS allowed origins (comma-separated)
+CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8080,https://learner-graph.com
+
+# ==============================================================================
+# LOGGING CONFIGURATION
+# ==============================================================================
+# Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+LOG_LEVEL=INFO
+
+# Log format: simple, detailed, json
+LOG_FORMAT=detailed
+
+# Log file path (leave empty to log to stdout)
+LOG_FILE_PATH=
+
+# Enable SQL query logging
+SQL_ECHO=false
+
+# ==============================================================================
+# MACHINE LEARNING & ANALYTICS
+# ==============================================================================
+# Enable ML model training
+ML_TRAINING_ENABLED=true
+
+# Model update frequency (hours)
+MODEL_UPDATE_FREQUENCY_HOURS=24
+
+# Minimum samples required for model training
+MIN_TRAINING_SAMPLES=1000
+
+# Feature engineering pipeline version
+FEATURE_PIPELINE_VERSION=v1.0
+
+# ==============================================================================
+# EXTERNAL SERVICES
+# ==============================================================================
+# Email service configuration (for notifications)
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+SMTP_TLS=true
+
+# Analytics service (optional)
+ANALYTICS_ENDPOINT=https://analytics.example.com/api/v1/events
+ANALYTICS_API_KEY=your-analytics-api-key
+
+# ==============================================================================
+# DEVELOPMENT & TESTING
+# ==============================================================================
+# Environment type: development, staging, production
+ENVIRONMENT=development
+
+# Enable debug mode (never use in production)
+DEBUG=false
+
+# Enable test mode
+TESTING=false
+
+# Test database URL (for running tests)
+TEST_DATABASE_URL=sqlite:///./test_learner_graph.db
+
+# ==============================================================================
+# DOCKER & KUBERNETES
+# ==============================================================================
+# Docker registry for image pushing
+DOCKER_REGISTRY=your-registry.com/learner-graph
+
+# Kubernetes namespace
+K8S_NAMESPACE=learner-graph
+
+# Container health check interval (seconds)
+HEALTH_CHECK_INTERVAL=30
+
+# ==============================================================================
+# FEATURE FLAGS
+# ==============================================================================
+# Enable new recommendation algorithm
+ENABLE_NEW_RECOMMENDATION_ALGO=false
+
+# Enable advanced analytics
+ENABLE_ADVANCED_ANALYTICS=true
+
+# Enable real-time notifications
+ENABLE_REAL_TIME_NOTIFICATIONS=false
+
+# Enable experimental features
+ENABLE_EXPERIMENTAL_FEATURES=false
+
+# ==============================================================================
+# PERFORMANCE TUNING
+# ==============================================================================
+# Database connection pool size
+DB_POOL_SIZE=10
+
+# Redis connection pool size
+REDIS_POOL_SIZE=20
+
+# Worker process count (for production)
+WORKER_PROCESSES=4
+
+# Request timeout (seconds)
+REQUEST_TIMEOUT=30
+
+# ==============================================================================
+# BACKUP & RECOVERY
+# ==============================================================================
+# Backup schedule (cron format)
+BACKUP_SCHEDULE=0 2 * * *
+
+# Backup retention days
+BACKUP_RETENTION_DAYS=30
+
+# Backup storage path
+BACKUP_STORAGE_PATH=/backups
+
+# ==============================================================================
+# MONITORING & ALERTS
+# ==============================================================================
+# Prometheus metrics endpoint
+METRICS_ENABLED=true
+METRICS_PORT=8001
+
+# Alert webhook URL
+ALERT_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
+
+# Health check endpoints
+HEALTH_CHECK_ENABLED=true
+
+# ==============================================================================
+# CONTENT DELIVERY
+# ==============================================================================
+# CDN URL for static assets
+CDN_URL=https://cdn.learner-graph.com
+
+# Static files directory
+STATIC_FILES_DIR=static
+
+# Upload directory for user content
+UPLOAD_DIR=uploads
+
+# Maximum file upload size (MB)
+MAX_UPLOAD_SIZE_MB=10 

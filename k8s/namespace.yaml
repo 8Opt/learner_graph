@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: learner-graph
+  labels:
+    name: learner-graph
+    app: learner-graph-rag-system
+    environment: production
+    managed-by: kubectl
+  annotations:
+    description: "Namespace for Learner Graph RAG System with A/B Testing" 

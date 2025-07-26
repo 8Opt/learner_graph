@@ -1,0 +1,212 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: learner-graph-monitor
+  namespace: learner-graph
+  labels:
+    app: learner-graph-rag-system
+    component: monitoring
+    prometheus: kube-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: learner-graph-rag-system
+      component: api
+  endpoints:
+  - port: http
+    interval: 30s
+    path: /metrics
+    scheme: http
+    scrapeTimeout: 10s
+    metricRelabelings:
+    - sourceLabels: [__name__]
+      regex: 'http_requests_total|recommendation_latency_seconds|user_sessions_active'
+      action: keep
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: learner-graph-alerts
+  namespace: learner-graph
+  labels:
+    app: learner-graph-rag-system
+    component: monitoring
+    prometheus: kube-prometheus
+spec:
+  groups:
+  - name: learner-graph.rules
+    rules:
+    # High recommendation latency alert
+    - alert: HighRecommendationLatency
+      expr: histogram_quantile(0.99, rate(recommendation_latency_seconds_bucket[5m])) > 0.1
+      for: 2m
+      labels:
+        severity: warning
+        service: learner-graph
+      annotations:
+        summary: "High recommendation latency detected"
+        description: "P99 recommendation latency is {{ $value }}s, above the 100ms target"
+    
+    # High error rate alert
+    - alert: HighErrorRate
+      expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
+      for: 5m
+      labels:
+        severity: critical
+        service: learner-graph
+      annotations:
+        summary: "High error rate detected"
+        description: "Error rate is {{ $value | humanizePercentage }} for the last 5 minutes"
+    
+    # Low recommendation generation rate
+    - alert: LowRecommendationGeneration
+      expr: rate(recommendations_generated_total[10m]) < 0.1
+      for: 10m
+      labels:
+        severity: warning
+        service: learner-graph
+      annotations:
+        summary: "Low recommendation generation rate"
+        description: "Recommendation generation rate is {{ $value }} req/sec, below expected threshold"
+    
+    # Redis connection issues
+    - alert: RedisConnectionFailure
+      expr: redis_connected_clients == 0
+      for: 1m
+      labels:
+        severity: critical
+        service: learner-graph
+      annotations:
+        summary: "Redis connection failure"
+        description: "No connected Redis clients detected"
+    
+    # A/B test imbalance
+    - alert: ABTestImbalance
+      expr: abs(ab_test_group_size{group="control"} - ab_test_group_size{group="treatment"}) / ab_test_group_size{group="control"} > 0.2
+      for: 15m
+      labels:
+        severity: warning
+        service: learner-graph
+      annotations:
+        summary: "A/B test group imbalance"
+        description: "A/B test groups are imbalanced by more than 20%"
+    
+    # Pod memory usage high
+    - alert: HighMemoryUsage
+      expr: container_memory_usage_bytes{container="learner-graph-api"} / container_spec_memory_limit_bytes > 0.9
+      for: 5m
+      labels:
+        severity: warning
+        service: learner-graph
+      annotations:
+        summary: "High memory usage"
+        description: "Pod {{ $labels.pod }} memory usage is {{ $value | humanizePercentage }}"
+    
+    # Practice boost target not met
+    - alert: PracticeBoostTargetMissed
+      expr: practice_minutes_boost_percentage < 15
+      for: 1d
+      labels:
+        severity: warning
+        service: learner-graph
+      annotations:
+        summary: "Practice boost target not met"
+        description: "Practice boost is only {{ $value }}%, below 15% target"
+
+---
+# Grafana Dashboard ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: learner-graph-dashboard
+  namespace: learner-graph
+  labels:
+    app: learner-graph-rag-system
+    component: monitoring
+    grafana_dashboard: "1"
+data:
+  learner-graph-dashboard.json: |
+    {
+      "dashboard": {
+        "id": null,
+        "title": "Learner Graph RAG System",
+        "tags": ["learner-graph", "rag", "recommendations"],
+        "timezone": "browser",
+        "panels": [
+          {
+            "id": 1,
+            "title": "Recommendation Latency P99",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "histogram_quantile(0.99, rate(recommendation_latency_seconds_bucket[5m]))",
+                "legendFormat": "P99 Latency"
+              }
+            ],
+            "fieldConfig": {
+              "defaults": {
+                "unit": "s",
+                "thresholds": {
+                  "steps": [
+                    {"color": "green", "value": null},
+                    {"color": "yellow", "value": 0.05},
+                    {"color": "red", "value": 0.1}
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": 2,
+            "title": "Recommendations Generated",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(recommendations_generated_total[5m])",
+                "legendFormat": "Recommendations/sec"
+              }
+            ]
+          },
+          {
+            "id": 3,
+            "title": "A/B Test Group Distribution",
+            "type": "piechart",
+            "targets": [
+              {
+                "expr": "ab_test_group_size",
+                "legendFormat": "{{ group }}"
+              }
+            ]
+          },
+          {
+            "id": 4,
+            "title": "Practice Minutes Boost",
+            "type": "stat",
+            "targets": [
+              {
+                "expr": "practice_minutes_boost_percentage",
+                "legendFormat": "Boost %"
+              }
+            ],
+            "fieldConfig": {
+              "defaults": {
+                "unit": "percent",
+                "thresholds": {
+                  "steps": [
+                    {"color": "red", "value": null},
+                    {"color": "yellow", "value": 10},
+                    {"color": "green", "value": 15}
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "time": {
+          "from": "now-1h",
+          "to": "now"
+        },
+        "refresh": "30s"
+      }
+    } 

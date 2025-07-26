@@ -1,0 +1,28 @@
+# JSON patches for resource modifications
+- op: replace
+  path: /spec/template/spec/containers/0/resources/limits/memory
+  value: "2Gi"
+
+- op: replace
+  path: /spec/template/spec/containers/0/resources/limits/cpu
+  value: "2"
+
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENVIRONMENT
+    value: "production"
+
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: METRICS_ENABLED
+    value: "true"
+
+- op: replace
+  path: /spec/template/spec/containers/0/livenessProbe/initialDelaySeconds
+  value: 60
+
+- op: replace
+  path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
+  value: 30 

@@ -1,0 +1,116 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: learner-graph-hpa
+  namespace: learner-graph
+  labels:
+    app: learner-graph-rag-system
+    component: autoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: learner-graph-app
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  # CPU-based scaling
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  # Memory-based scaling
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  # Custom metrics for recommendation latency
+  - type: Pods
+    pods:
+      metric:
+        name: recommendation_latency_p99
+      target:
+        type: AverageValue
+        averageValue: "100m"  # 100ms target
+  # Request-based scaling
+  - type: Object
+    object:
+      metric:
+        name: requests_per_second
+      target:
+        type: AverageValue
+        averageValue: "50"
+      describedObject:
+        apiVersion: v1
+        kind: Service
+        name: learner-graph-service
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+      - type: Pods
+        value: 2
+        periodSeconds: 60
+      selectPolicy: Max
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+      - type: Pods
+        value: 1
+        periodSeconds: 60
+      selectPolicy: Min
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: learner-graph-pdb
+  namespace: learner-graph
+  labels:
+    app: learner-graph-rag-system
+    component: pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: learner-graph-rag-system
+      component: api
+
+---
+# Vertical Pod Autoscaler (VPA) for right-sizing resources
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: learner-graph-vpa
+  namespace: learner-graph
+  labels:
+    app: learner-graph-rag-system
+    component: vpa
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: learner-graph-app
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+    - containerName: learner-graph-api
+      minAllowed:
+        cpu: 100m
+        memory: 128Mi
+      maxAllowed:
+        cpu: 2
+        memory: 2Gi
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits 

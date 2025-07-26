@@ -1,18 +1,19 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session
 from typing import List, Optional
 
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy.orm import Session
+
 from app.core.database import get_db
+from app.repository.user_repository import user_repository
+from app.schemas.base import APIResponse, PaginationParams
 from app.schemas.user import (
     UserCreate,
-    UserUpdate,
+    UserLearningProfile,
+    UserProgress,
     UserResponse,
     UserStats,
-    UserProgress,
-    UserLearningProfile,
+    UserUpdate,
 )
-from app.schemas.base import APIResponse, PaginationParams
-from app.repository.user_repository import user_repository
 
 router = APIRouter(prefix="/users", tags=["users"])
 

@@ -1,15 +1,15 @@
-from .base import BaseModel, TimestampMixin, SoftDeleteMixin
-from .user import User
+from .base import BaseModel, SoftDeleteMixin, TimestampMixin
 from .concept import Concept
-from .question import Question
 from .learning_session import LearningSession
 from .mastery import MasteryLevel
+from .question import Question
+from .recommendation import ABTestExperiment, Recommendation
 from .streak import Streak
-from .recommendation import Recommendation, ABTestExperiment
+from .user import User
 
 __all__ = [
     "BaseModel",
-    "TimestampMixin", 
+    "TimestampMixin",
     "SoftDeleteMixin",
     "User",
     "Concept",
@@ -18,5 +18,5 @@ __all__ = [
     "MasteryLevel",
     "Streak",
     "Recommendation",
-    "ABTestExperiment"
-] 
+    "ABTestExperiment",
+]

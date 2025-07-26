@@ -1,0 +1,84 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: learner-graph-rag-system
+  annotations:
+    config.kubernetes.io/local-config: "true"
+
+# Namespace for all resources
+namespace: learner-graph
+
+# Common labels applied to all resources
+commonLabels:
+  app: learner-graph-rag-system
+  managed-by: kustomize
+  version: v1.0.0
+
+# Resources to include
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - redis-deployment.yaml
+  - app-deployment.yaml
+  - ingress.yaml
+  - hpa.yaml
+  - monitoring.yaml
+
+# Images to customize
+images:
+  - name: learner-graph
+    newTag: v1.0.0
+
+# ConfigMap generators
+configMapGenerator:
+  - name: app-version-config
+    literals:
+      - VERSION=v1.0.0
+      - DEPLOYMENT_DATE=$(date +%Y-%m-%d)
+      - GIT_COMMIT=$(git rev-parse --short HEAD)
+
+# Secret generators
+secretGenerator:
+  - name: app-secrets
+    envs:
+      - secrets.env
+    type: Opaque
+
+# Patches for different environments
+patchesStrategicMerge:
+  - patches/production-patch.yaml
+
+# JSON patches
+patchesJson6902:
+  - target:
+      version: v1
+      kind: Deployment
+      name: learner-graph-app
+    path: patches/resource-patch.yaml
+
+# Replicas for different components
+replicas:
+  - name: learner-graph-app
+    count: 3
+  - name: redis-deployment
+    count: 1
+
+# Name prefix for resources
+namePrefix: prod-
+
+# Name suffix for resources  
+nameSuffix: -v1
+
+# Variable substitutions
+vars:
+  - name: REDIS_SERVICE_NAME
+    objref:
+      kind: Service
+      name: redis-service
+      apiVersion: v1
+  - name: APP_SERVICE_NAME
+    objref:
+      kind: Service
+      name: learner-graph-service
+      apiVersion: v1 

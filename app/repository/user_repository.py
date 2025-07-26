@@ -1,12 +1,14 @@
-from typing import Optional, List, Dict, Any
-from sqlalchemy.orm import Session, joinedload
-from sqlalchemy import func, and_, desc
 from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
 
-from app.models.user import User
+from sqlalchemy import and_, desc, func
+from sqlalchemy.orm import Session, joinedload
+
 from app.models.learning_session import LearningSession
 from app.models.mastery import MasteryLevel
 from app.models.streak import Streak
+from app.models.user import User
+
 from .base import BaseRepository
 
 

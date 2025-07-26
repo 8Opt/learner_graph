@@ -1,13 +1,14 @@
-import random
 import hashlib
-from typing import Dict, Any, Optional, List
+import random
 from datetime import datetime
+from typing import Any, Dict, List, Optional
+
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.core.exceptions import ABTestException
-from app.models.user import User
 from app.models.recommendation import ABTestExperiment
+from app.models.user import User
 from app.repository.recommendation_repository import ab_test_repository
 from app.repository.user_repository import user_repository
 

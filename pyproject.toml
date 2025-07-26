@@ -1,7 +1,7 @@
 [project]
 name = "learner-graph"
 version = "0.1.0"
-description = "Add your description here"
+description = "Learner Graph Recommendations - Design the intelligence that makes AI a “smart-cool friend” — a mastery graph, progress road-maps, and streak-goal engine that boost weekly practice by +20 %."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -22,4 +22,5 @@ dependencies = [
     "pytest-asyncio==0.21.1",
     "pytest-cov==4.1.0",
     "ruff>=0.12.5",
+    "isort>=6.0.1",
 ]
