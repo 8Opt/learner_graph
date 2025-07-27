@@ -1,6 +1,6 @@
 # Learner Graph RAG System
 
-A comprehensive **Recommendation Algorithm/Graph (RAG)** system designed to boost learner engagement by **+20%** through personalized learning recommendations, mastery tracking, and gamified streak goals.
+A comprehensive **Recommendation Algorithm/Graph (RAG)** system designed to boost learner engagement through personalized learning recommendations, mastery tracking, and gamified streak goals.
 
 ## 🚀 Features
 
